@@ -1,19 +1,6 @@
-version: '3'
-services: 
-  jenkins: 
-    image: jenkins/jenkins:lts-jdk11
-    privileged: true
-    user: root
-    ports:
-      - 8080:8080
-      - 50000:50000
-    container_name: jenkins
-    networks:
-      - pipeline
-    volumes:
-      - /home/seck/jenkins_compose/jenkins_configuration:/var/jenkins_home
-      - /var/run/docker.sock:/var/run/docker.sock 
+version: "3"
 
+services:
   sonarqube:
     image: sonarqube:9.2.1-community
     restart: unless-stopped
@@ -24,9 +11,6 @@ services:
     ports:
       - "9000:9000"
       - "9092:9092"
-    container_name: sonar
-    networks:
-      - pipeline
     volumes:
       - sonarqube_conf:/opt/sonarqube/conf
       - sonarqube_data:/opt/sonarqube/data
@@ -40,9 +24,6 @@ services:
       - POSTGRES_USER=sonar
       - POSTGRES_PASSWORD=v07IGCFCF83Z95NX
       - POSTGRES_DB=sonarqube
-    networks:
-      - pipeline
-    container_name: postgres
     volumes:
       - sonarqube_db:/var/lib/postgresql
       # This needs explicit mapping due to https://github.com/docker-library/postgres/blob/4e48e3228a30763913ece952c611e5e9b95c8759/Dockerfile.template#L52
@@ -55,9 +36,3 @@ volumes:
   sonarqube_data:
   sonarqube_db:
   sonarqube_extensions:
-
-networks:
-  pipeline: {}
-
-
-
